@@ -53,6 +53,7 @@ var __values = (this && this.__values) || function (o) {
     };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Rx = require("rxjs");
 function insert(item, pos, arr) {
     var result = arr.slice();
     result.splice(pos, 0, item);
@@ -124,3 +125,7 @@ function permutations(arr) {
     });
 }
 exports.permutations = permutations;
+function rxPermutations(arr) {
+    return Rx.Observable.from(permutations(arr));
+}
+exports.rxPermutations = rxPermutations;

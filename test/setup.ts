@@ -6,7 +6,7 @@ export interface ISample {
     [name: string]: any;
 }
 
-export function withProvider(samples: ISample[], itFn: (sample: ISample) => void) {
+export function withProvider<T extends ISample>(samples: T[], itFn: (sample: T) => void): void {
     samples.filter((sample) => typeof (sample as any).title !== "undefined").forEach(itFn);
 }
 

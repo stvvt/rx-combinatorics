@@ -1,3 +1,5 @@
+import * as Rx from "rxjs";
+
 function unique<T>(arr: T[]): Iterable<T> {
     return arr.reduce((acc, item) => {
         acc.set(item, true);
@@ -5,7 +7,7 @@ function unique<T>(arr: T[]): Iterable<T> {
     }, new Map<T, boolean>()).keys();
 }
 
-export function* combinations<T>(arr: T[], n: number): Iterable<T[]> {
+export function* combinations<T>(arr: T[], n: number): IterableIterator<T[]> {
     if (n >= arr.length || n <= 1) {
         if (n === arr.length) {
             yield arr;
@@ -28,4 +30,8 @@ export function* combinations<T>(arr: T[], n: number): Iterable<T[]> {
             yield [first, ...c];
         }
     }
+}
+
+export function rxCombinations<T>(arr: T[], n: number): Rx.Observable<T[]> {
+    return Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
 }

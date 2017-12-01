@@ -57,6 +57,7 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Rx = require("rxjs");
 function unique(arr) {
     return arr.reduce(function (acc, item) {
         acc.set(item, true);
@@ -141,3 +142,7 @@ function combinations(arr, n) {
     });
 }
 exports.combinations = combinations;
+function rxCombinations(arr, n) {
+    return Rx.Observable.from(combinations(arr, n));
+}
+exports.rxCombinations = rxCombinations;

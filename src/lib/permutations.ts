@@ -1,3 +1,5 @@
+import * as Rx from "rxjs";
+
 function insert<T>(item: T, pos: number, arr: T[]): T[] {
     const result = arr.slice();
     result.splice(pos, 0, item);
@@ -25,4 +27,8 @@ export function* permutations<T>(arr: T[]): Iterable<T[]> {
     for (const p of permutations(rest)) {
         yield *slide(first, p);
     }
+}
+
+export function rxPermutations<T>(arr: T[]): Rx.Observable<T[]> {
+    return Rx.Observable.from<T[]>(permutations<T>(arr) as any);
 }
