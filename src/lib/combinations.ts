@@ -32,6 +32,6 @@ export function* combinations<T>(arr: T[], n: number): IterableIterator<T[]> {
     }
 }
 
-export function rxCombinations<T>(arr: T[], n: number): Rx.Observable<T[]> {
+export function combinations$<T>(arr: T[], n: number): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
 }

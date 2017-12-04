@@ -29,6 +29,6 @@ export function* permutations<T>(arr: T[]): Iterable<T[]> {
     }
 }
 
-export function rxPermutations<T>(arr: T[]): Rx.Observable<T[]> {
+export function permutations$<T>(arr: T[]): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(permutations<T>(arr) as any);
 }

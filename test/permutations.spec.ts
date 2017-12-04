@@ -1,5 +1,5 @@
 import * as Rx from "rxjs";
-import { permutations, rxPermutations } from "../src";
+import { permutations, permutations$ } from "../src";
 import { slide } from "../src/lib/permutations";
 import { samples, slideSamples } from "./fixtures/permutations.fixture";
 import { expect, withProvider, ISample } from "./setup";
@@ -49,7 +49,7 @@ describe("slide", () => {
 
 describe("permutations observable", () => {
     it("should be observable", () => {
-        const observable = rxPermutations([1, 2, 3]);
+        const observable = permutations$([1, 2, 3]);
         expect(observable).to.be.instanceof(Rx.Observable);
     });
 
@@ -58,7 +58,7 @@ describe("permutations observable", () => {
             it(`should generate all permutations of array elements: ${sample.title}`, () => {
                 const result: Array<typeof sample.input> = [];
 
-                rxPermutations(sample.input)
+                permutations$(sample.input)
                     .subscribe((c) => result.push(c));
 
                 expect(result).to.have.same.deep.members(sample.expectation);

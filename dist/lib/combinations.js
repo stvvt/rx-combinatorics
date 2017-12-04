@@ -142,7 +142,7 @@ function combinations(arr, n) {
     });
 }
 exports.combinations = combinations;
-function rxCombinations(arr, n) {
+function combinations$(arr, n) {
     return Rx.Observable.from(combinations(arr, n));
 }
-exports.rxCombinations = rxCombinations;
+exports.combinations$ = combinations$;

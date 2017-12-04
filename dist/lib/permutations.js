@@ -125,7 +125,7 @@ function permutations(arr) {
     });
 }
 exports.permutations = permutations;
-function rxPermutations(arr) {
+function permutations$(arr) {
     return Rx.Observable.from(permutations(arr));
 }
-exports.rxPermutations = rxPermutations;
+exports.permutations$ = permutations$;
