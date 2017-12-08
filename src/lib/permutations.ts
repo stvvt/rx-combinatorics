@@ -30,25 +30,28 @@ function* generator<T>(arr: T[]): Iterable<T[]> {
     }
 }
 
-function count<T>(arr: T[]): number {
+export interface IPermutations {
+    <T>(arr: T[]): IterableIterator<T[]>;
+    count<T>(arr: T[]): number;
+    observable<T>(arr: T[]): Rx.Observable<T[]>;
+}
+
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+export const permutations: IPermutations = <IPermutations> generator;
+permutations.count = <T>(arr: T[]): number => {
     const h = histogram(arr);
     let D: number = 1;
 
     h.forEach((f) => D *= factorial(f));
 
     return factorial(arr.length) / D;
-}
+};
 
-export interface IPermutations {
-    <T>(arr: T[]): IterableIterator<T[]>;
-    count<T>(arr: T[]): number;
-}
+permutations.observable = <T>(arr: T[]): Rx.Observable<T[]> => Rx.Observable.from<T[]>(permutations<T>(arr) as any);
 
-// tslint:disable-next-line:no-angle-bracket-type-assertion
-export const permutations: IPermutations = <IPermutations>generator;
-permutations.count = count;
-
-
+/**
+ * @deprecated
+ */
 export function permutations$<T>(arr: T[]): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(permutations<T>(arr) as any);
 }

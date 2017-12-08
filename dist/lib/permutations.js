@@ -125,15 +125,18 @@ function generator(arr) {
         }
     });
 }
-function count(arr) {
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+exports.permutations = generator;
+exports.permutations.count = function (arr) {
     var h = utils_1.histogram(arr);
     var D = 1;
     h.forEach(function (f) { return D *= utils_1.factorial(f); });
     return utils_1.factorial(arr.length) / D;
-}
-// tslint:disable-next-line:no-angle-bracket-type-assertion
-exports.permutations = generator;
-exports.permutations.count = count;
+};
+exports.permutations.observable = function (arr) { return Rx.Observable.from(exports.permutations(arr)); };
+/**
+ * @deprecated
+ */
 function permutations$(arr) {
     return Rx.Observable.from(exports.permutations(arr));
 }

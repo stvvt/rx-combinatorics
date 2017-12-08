@@ -182,6 +182,12 @@ function count(arr, n) {
 // tslint:disable-next-line:no-angle-bracket-type-assertion
 exports.combinations = generator;
 exports.combinations.count = count;
+exports.combinations.observable = function (arr, n) {
+    return Rx.Observable.from(exports.combinations(arr, n));
+};
+/**
+ * @deprecated
+ */
 function combinations$(arr, n) {
     return Rx.Observable.from(exports.combinations(arr, n));
 }

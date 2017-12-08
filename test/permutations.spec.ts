@@ -57,7 +57,7 @@ describe("slide", () => {
 
 describe("permutations observable", () => {
     it("should be observable", () => {
-        const observable = permutations$([1, 2, 3]);
+        const observable = permutations.observable([1, 2, 3]);
         expect(observable).to.be.instanceof(Rx.Observable);
     });
 
@@ -66,7 +66,7 @@ describe("permutations observable", () => {
             it(`should generate all permutations of array elements: ${sample.title}`, () => {
                 const result: Array<typeof sample.input> = [];
 
-                permutations$(sample.input)
+                permutations.observable(sample.input)
                     .subscribe((c) => result.push(c));
 
                 expect(result).to.have.same.deep.members(sample.expectation);

@@ -82,12 +82,18 @@ function count<T>(arr: T[], n: number): number {
 export interface ICombinations {
     <T>(arr: T[], n: number): IterableIterator<T[]>;
     count<T>(arr: T[], n: number): number;
+    observable<T>(arr: T[], n: number): Rx.Observable<T[]>;
 }
 
 // tslint:disable-next-line:no-angle-bracket-type-assertion
-export const combinations: ICombinations = <ICombinations>generator;
+export const combinations: ICombinations = <ICombinations> generator;
 combinations.count = count;
+combinations.observable = <T>(arr: T[], n: number): Rx.Observable<T[]> =>
+    Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
 
+/**
+ * @deprecated
+ */
 export function combinations$<T>(arr: T[], n: number): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
 }

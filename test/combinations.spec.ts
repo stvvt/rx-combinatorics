@@ -38,7 +38,7 @@ describe("combinations counter", () => {
 
 describe("combinations observable", () => {
     it("should be observable", () => {
-        const observable = combinations$([1, 2, 3], 2);
+        const observable = combinations.observable([1, 2, 3], 2);
 
         expect(observable).to.be.instanceof(Rx.Observable);
     });
@@ -48,7 +48,7 @@ describe("combinations observable", () => {
             it(`should generate all ${sample.n}-combinations of array elements: ${sample.title}`, () => {
                 const result: Array<typeof sample.input> = [];
 
-                combinations$(sample.input, sample.n)
+                combinations.observable(sample.input, sample.n)
                     .subscribe((c) => result.push(c));
 
                 expect(result).to.have.same.deep.members(sample.expectation);
