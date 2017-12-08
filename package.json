@@ -24,6 +24,7 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
+    "fast-memoize": "^2.2.8",
     "rxjs": "^5.5.2"
   }
 }

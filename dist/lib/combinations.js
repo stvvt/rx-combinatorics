@@ -58,13 +58,8 @@ var __spread = (this && this.__spread) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Rx = require("rxjs");
-function unique(arr) {
-    return arr.reduce(function (acc, item) {
-        acc.set(item, true);
-        return acc;
-    }, new Map()).keys();
-}
-function combinations(arr, n) {
+var utils_1 = require("./utils");
+function generator(arr, n) {
     var _a, _b, item, e_1_1, _c, first, rest, dups, _d, _e, c, e_2_1, e_1, _f, e_2, _g;
     return __generator(this, function (_h) {
         switch (_h.label) {
@@ -80,7 +75,7 @@ function combinations(arr, n) {
                 _h.label = 3;
             case 3:
                 _h.trys.push([3, 8, 9, 10]);
-                _a = __values(unique(arr)), _b = _a.next();
+                _a = __values(utils_1.unique(arr)), _b = _a.next();
                 _h.label = 4;
             case 4:
                 if (!!_b.done) return [3 /*break*/, 7];
@@ -106,14 +101,14 @@ function combinations(arr, n) {
             case 10: return [2 /*return*/];
             case 11:
                 _c = __read(arr), first = _c[0], rest = _c.slice(1);
-                return [5 /*yield**/, __values(combinations(rest, n))];
+                return [5 /*yield**/, __values(exports.combinations(rest, n))];
             case 12:
                 _h.sent();
                 dups = rest.indexOf(first) >= 0;
                 _h.label = 13;
             case 13:
                 _h.trys.push([13, 18, 19, 20]);
-                _d = __values(combinations(rest, n - 1)), _e = _d.next();
+                _d = __values(exports.combinations(rest, n - 1)), _e = _d.next();
                 _h.label = 14;
             case 14:
                 if (!!_e.done) return [3 /*break*/, 17];
@@ -141,8 +136,53 @@ function combinations(arr, n) {
         }
     });
 }
-exports.combinations = combinations;
+function count(arr, n) {
+    // tslint:disable-next-line:no-shadowed-variable
+    function innerCount(step, S, n) {
+        var result = 0;
+        switch (true) {
+            case S < n:
+                result = 0;
+                break;
+            case S === n:
+                result = 1;
+                break;
+            case n === 1:
+                result = frequencies.length - step;
+                break;
+            default: {
+                S = S - frequencies[step];
+                for (var i = 0; i <= frequencies[step]; i++) {
+                    result += innerCount(step + 1, S, n - i);
+                }
+                result += frequencies[step] < n ? 0 : 1;
+            }
+        }
+        return result;
+    }
+    if (n <= 0) {
+        return 0;
+    }
+    if (arr.length < n) {
+        return 0;
+    }
+    var h = utils_1.histogram(arr);
+    if (h.size === arr.length) {
+        return utils_1.factorial(arr.length) / (utils_1.factorial(n) * utils_1.factorial(arr.length - n));
+    }
+    var frequencies = [];
+    var sum = 0;
+    h.forEach(function (f) {
+        var m = f > n ? n : f;
+        frequencies.push(m);
+        sum += m;
+    });
+    return innerCount(0, sum, n);
+}
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+exports.combinations = generator;
+exports.combinations.count = count;
 function combinations$(arr, n) {
-    return Rx.Observable.from(combinations(arr, n));
+    return Rx.Observable.from(exports.combinations(arr, n));
 }
 exports.combinations$ = combinations$;
