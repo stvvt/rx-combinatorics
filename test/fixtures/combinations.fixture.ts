@@ -3,6 +3,7 @@ import { ISample } from "../setup";
 export interface ICombinationsSample<T> extends ISample {
     input: T[];
     n: number;
+    expectation: T[][];
 }
 
 export const samples: Array<ICombinationsSample<number>> = [{
