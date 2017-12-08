@@ -33,6 +33,14 @@ describe("permutations", () => {
     });
 });
 
+describe("permutations counter", () => {
+    withProvider(samples, (sample) => {
+        it(`should return correct count - ${sample.title}`, () => {
+            expect(permutations.count(sample.input)).to.be.equal(sample.expectation.length);
+        });
+    });
+});
+
 describe("slide", () => {
     withProvider(slideSamples, (sample) => {
         it(`should insert new element in every position: ${sample.title}`, () => {
