@@ -1,13 +1,7 @@
 import * as Rx from "rxjs";
+import { unique, histogram, factorial } from "./utils";
 
-function unique<T>(arr: T[]): Iterable<T> {
-    return arr.reduce((acc, item) => {
-        acc.set(item, true);
-        return acc;
-    }, new Map<T, boolean>()).keys();
-}
-
-export function* combinations<T>(arr: T[], n: number): IterableIterator<T[]> {
+function* generator<T>(arr: T[], n: number): IterableIterator<T[]> {
     if (n >= arr.length || n <= 1) {
         if (n === arr.length) {
             yield arr;
@@ -32,6 +26,74 @@ export function* combinations<T>(arr: T[], n: number): IterableIterator<T[]> {
     }
 }
 
-export function rxCombinations<T>(arr: T[], n: number): Rx.Observable<T[]> {
+function count<T>(arr: T[], n: number): number {
+    // tslint:disable-next-line:no-shadowed-variable
+    function innerCount(step: number, S: number, n: number): number {
+        let result = 0;
+
+        switch (true) {
+            case S < n:
+                result = 0;
+                break;
+            case S === n:
+                result = 1;
+                break;
+            case n === 1:
+                result = frequencies.length - step;
+                break;
+            default: {
+                S = S - frequencies[step];
+                for (let i = 0; i <= frequencies[step]; i++) {
+                    result += innerCount(step + 1, S, n - i);
+                }
+
+                result += frequencies[step] < n ? 0 : 1;
+            }
+        }
+
+        return result;
+    }
+
+    if (n <= 0) {
+        return 0;
+    }
+    if (arr.length < n) {
+        return 0;
+    }
+
+    const h = histogram(arr);
+
+    if (h.size === arr.length) {
+        return factorial(arr.length) / (factorial(n) * factorial(arr.length - n));
+    }
+
+    const frequencies: number[] = [];
+    let sum = 0;
+
+    h.forEach((f) => {
+        const m = f > n ? n : f;
+        frequencies.push(m);
+        sum += m;
+    });
+
+    return innerCount(0, sum, n);
+}
+
+export interface ICombinations {
+    <T>(arr: T[], n: number): IterableIterator<T[]>;
+    count<T>(arr: T[], n: number): number;
+    observable<T>(arr: T[], n: number): Rx.Observable<T[]>;
+}
+
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+export const combinations: ICombinations = <ICombinations> generator;
+combinations.count = count;
+combinations.observable = <T>(arr: T[], n: number): Rx.Observable<T[]> =>
+    Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
+
+/**
+ * @deprecated
+ */
+export function combinations$<T>(arr: T[], n: number): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(combinations<T>(arr, n) as any);
 }
