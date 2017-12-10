@@ -1,4 +1,5 @@
 import * as Rx from "rxjs";
+import { factorial, histogram, reduceIterable } from "./utils";
 
 function insert<T>(item: T, pos: number, arr: T[]): T[] {
     const result = arr.slice();
@@ -17,7 +18,7 @@ export function* slide<T>(item: T, arr: T[]): Iterable<T[]> {
     }
 }
 
-export function* permutations<T>(arr: T[]): Iterable<T[]> {
+function* generator<T>(arr: T[]): Iterable<T[]> {
     if (arr.length <= 1) {
         return yield arr;
     }
@@ -25,10 +26,30 @@ export function* permutations<T>(arr: T[]): Iterable<T[]> {
     const [first, ...rest] = arr;
 
     for (const p of permutations(rest)) {
-        yield *slide(first, p);
+        yield* slide(first, p);
     }
 }
 
-export function rxPermutations<T>(arr: T[]): Rx.Observable<T[]> {
+export interface IPermutations {
+    <T>(arr: T[]): IterableIterator<T[]>;
+    count<T>(arr: T[]): number;
+    observable<T>(arr: T[]): Rx.Observable<T[]>;
+}
+
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+export const permutations: IPermutations = <IPermutations> generator;
+permutations.count = <T>(arr: T[]): number => {
+    const h = histogram(arr);
+    const D = reduceIterable(h.values(), (acc, f) => acc * factorial(f), 1);
+
+    return factorial(arr.length) / D;
+};
+
+permutations.observable = <T>(arr: T[]): Rx.Observable<T[]> => Rx.Observable.from<T[]>(permutations<T>(arr) as any);
+
+/**
+ * @deprecated
+ */
+export function permutations$<T>(arr: T[]): Rx.Observable<T[]> {
     return Rx.Observable.from<T[]>(permutations<T>(arr) as any);
 }

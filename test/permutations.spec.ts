@@ -1,5 +1,5 @@
 import * as Rx from "rxjs";
-import { permutations, rxPermutations } from "../src";
+import { permutations, permutations$ } from "../src";
 import { slide } from "../src/lib/permutations";
 import { samples, slideSamples } from "./fixtures/permutations.fixture";
 import { expect, withProvider, ISample } from "./setup";
@@ -33,6 +33,14 @@ describe("permutations", () => {
     });
 });
 
+describe("permutations counter", () => {
+    withProvider(samples, (sample) => {
+        it(`should return correct count - ${sample.title}`, () => {
+            expect(permutations.count(sample.input)).to.be.equal(sample.expectation.length);
+        });
+    });
+});
+
 describe("slide", () => {
     withProvider(slideSamples, (sample) => {
         it(`should insert new element in every position: ${sample.title}`, () => {
@@ -49,7 +57,7 @@ describe("slide", () => {
 
 describe("permutations observable", () => {
     it("should be observable", () => {
-        const observable = rxPermutations([1, 2, 3]);
+        const observable = permutations.observable([1, 2, 3]);
         expect(observable).to.be.instanceof(Rx.Observable);
     });
 
@@ -58,7 +66,7 @@ describe("permutations observable", () => {
             it(`should generate all permutations of array elements: ${sample.title}`, () => {
                 const result: Array<typeof sample.input> = [];
 
-                rxPermutations(sample.input)
+                permutations.observable(sample.input)
                     .subscribe((c) => result.push(c));
 
                 expect(result).to.have.same.deep.members(sample.expectation);

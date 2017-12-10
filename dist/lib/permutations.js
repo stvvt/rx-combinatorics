@@ -54,6 +54,7 @@ var __values = (this && this.__values) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Rx = require("rxjs");
+var utils_1 = require("./utils");
 function insert(item, pos, arr) {
     var result = arr.slice();
     result.splice(pos, 0, item);
@@ -84,7 +85,7 @@ function slide(item, arr) {
     });
 }
 exports.slide = slide;
-function permutations(arr) {
+function generator(arr) {
     var _a, first, rest, _b, _c, p, e_1_1, e_1, _d;
     return __generator(this, function (_e) {
         switch (_e.label) {
@@ -97,7 +98,7 @@ function permutations(arr) {
                 _e.label = 3;
             case 3:
                 _e.trys.push([3, 8, 9, 10]);
-                _b = __values(permutations(rest)), _c = _b.next();
+                _b = __values(exports.permutations(rest)), _c = _b.next();
                 _e.label = 4;
             case 4:
                 if (!!_c.done) return [3 /*break*/, 7];
@@ -124,8 +125,19 @@ function permutations(arr) {
         }
     });
 }
-exports.permutations = permutations;
-function rxPermutations(arr) {
-    return Rx.Observable.from(permutations(arr));
+// tslint:disable-next-line:no-angle-bracket-type-assertion
+exports.permutations = generator;
+exports.permutations.count = function (arr) {
+    var h = utils_1.histogram(arr);
+    var D = 1;
+    h.forEach(function (f) { return D *= utils_1.factorial(f); });
+    return utils_1.factorial(arr.length) / D;
+};
+exports.permutations.observable = function (arr) { return Rx.Observable.from(exports.permutations(arr)); };
+/**
+ * @deprecated
+ */
+function permutations$(arr) {
+    return Rx.Observable.from(exports.permutations(arr));
 }
-exports.rxPermutations = rxPermutations;
+exports.permutations$ = permutations$;
