@@ -136,7 +136,16 @@ function generator(arr, n) {
         }
     });
 }
-function count(arr, n) {
+/**
+ * Permutations of n elements with frequencies
+ *
+ * count = n! / (f1! * f2! ... * fk!)
+ */
+function permutationsCount(n, frequencies) {
+    return utils_1.factorial(n) / utils_1.reduceIterable(frequencies, function (r, f) { return r * utils_1.factorial(f); }, 1);
+}
+function count(arr, n, ordered) {
+    if (ordered === void 0) { ordered = false; }
     // tslint:disable-next-line:no-shadowed-variable
     function innerCount(step, S, n) {
         var result = 0;
@@ -145,7 +154,7 @@ function count(arr, n) {
                 result = 0;
                 break;
             case S === n:
-                result = 1;
+                result = ordered ? permutationsCount(n, frequencies.slice(step)) : 1;
                 break;
             case n === 1:
                 result = frequencies.length - step;
@@ -156,6 +165,9 @@ function count(arr, n) {
                     result += innerCount(step + 1, S, n - i);
                 }
                 result += frequencies[step] < n ? 0 : 1;
+                if (ordered) {
+                    result *= permutationsCount(n, frequencies.slice(step));
+                }
             }
         }
         return result;

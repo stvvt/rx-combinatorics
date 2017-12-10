@@ -129,8 +129,7 @@ function generator(arr) {
 exports.permutations = generator;
 exports.permutations.count = function (arr) {
     var h = utils_1.histogram(arr);
-    var D = 1;
-    h.forEach(function (f) { return D *= utils_1.factorial(f); });
+    var D = utils_1.reduceIterable(h.values(), function (acc, f) { return acc * utils_1.factorial(f); }, 1);
     return utils_1.factorial(arr.length) / D;
 };
 exports.permutations.observable = function (arr) { return Rx.Observable.from(exports.permutations(arr)); };
