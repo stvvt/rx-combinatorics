@@ -11,6 +11,16 @@ export function unique<T>(arr: T[]): Iterable<T> {
     return histogram<T>(arr).keys();
 }
 
+export function reduceIterable<V, R>(iterable: Iterable<V>, reduceFn: (a: R, v: V) => R, init: R): R {
+    let result: R = init;
+
+    for (const v of iterable) {
+        result = reduceFn(result, v);
+    }
+
+    return result;
+}
+
 export const factorial = memoize(
     (n: number): number => {
         if (n < 0) {

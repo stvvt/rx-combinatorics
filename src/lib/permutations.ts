@@ -1,5 +1,5 @@
 import * as Rx from "rxjs";
-import { factorial, histogram } from "./utils";
+import { factorial, histogram, reduceIterable } from "./utils";
 
 function insert<T>(item: T, pos: number, arr: T[]): T[] {
     const result = arr.slice();
@@ -40,9 +40,7 @@ export interface IPermutations {
 export const permutations: IPermutations = <IPermutations> generator;
 permutations.count = <T>(arr: T[]): number => {
     const h = histogram(arr);
-    let D: number = 1;
-
-    h.forEach((f) => D *= factorial(f));
+    const D = reduceIterable(h.values(), (acc, f) => acc * factorial(f), 1);
 
     return factorial(arr.length) / D;
 };

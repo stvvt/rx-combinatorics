@@ -73,3 +73,34 @@ export const samples: Array<ICombinationsSample<number>> = [{
         [1, 1, 3]
     ]
 }];
+
+export const samplesCount = samples.concat([{
+    title: "straight case non-unique (1) (ordered)",
+    input: [1, 2, 3, 1],
+    n: 3,
+    ordered: true,
+    expectation: [
+        [1, 2, 3],
+        [1, 3, 2],
+        [2, 1, 3],
+        [2, 3, 1],
+        [3, 1, 2],
+        [3, 2, 1],
+        [1, 1, 2],
+        [1, 2, 1],
+        [2, 1, 1],
+        [1, 1, 3],
+        [1, 3, 1],
+        [3, 1, 1],
+    ]
+}, {
+    title: "straight case non-unique (1) (ordered)",
+    input: [1, 1, 2, 3],
+    n: 1,
+    ordered: true,
+    expectation: [
+        [1],
+        [2],
+        [3],
+    ]
+}]);

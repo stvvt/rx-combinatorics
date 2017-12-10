@@ -1,5 +1,5 @@
 import * as Rx from "rxjs";
-import { unique, histogram, factorial } from "./utils";
+import { unique, histogram, factorial, reduceIterable } from "./utils";
 
 function* generator<T>(arr: T[], n: number): IterableIterator<T[]> {
     if (n >= arr.length || n <= 1) {
@@ -26,7 +26,16 @@ function* generator<T>(arr: T[], n: number): IterableIterator<T[]> {
     }
 }
 
-function count<T>(arr: T[], n: number): number {
+/**
+ * Permutations of n elements with frequencies
+ *
+ * count = n! / (f1! * f2! ... * fk!)
+ */
+function permutationsCount(n: number, frequencies: number[]): number {
+    return factorial(n) / reduceIterable(frequencies, (r, f) => r * factorial(f), 1);
+}
+
+function count<T>(arr: T[], n: number, ordered: boolean = false): number {
     // tslint:disable-next-line:no-shadowed-variable
     function innerCount(step: number, S: number, n: number): number {
         let result = 0;
@@ -36,7 +45,7 @@ function count<T>(arr: T[], n: number): number {
                 result = 0;
                 break;
             case S === n:
-                result = 1;
+                result = ordered ? permutationsCount(n, frequencies.slice(step)) : 1;
                 break;
             case n === 1:
                 result = frequencies.length - step;
@@ -48,6 +57,10 @@ function count<T>(arr: T[], n: number): number {
                 }
 
                 result += frequencies[step] < n ? 0 : 1;
+
+                if (ordered) {
+                    result *= permutationsCount(n, frequencies.slice(step));
+                }
             }
         }
 
@@ -81,7 +94,7 @@ function count<T>(arr: T[], n: number): number {
 
 export interface ICombinations {
     <T>(arr: T[], n: number): IterableIterator<T[]>;
-    count<T>(arr: T[], n: number): number;
+    count<T>(arr: T[], n: number, ordered?: boolean): number;
     observable<T>(arr: T[], n: number): Rx.Observable<T[]>;
 }
 

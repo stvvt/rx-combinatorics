@@ -1,6 +1,6 @@
 import * as Rx from "rxjs";
 import { expect, withProvider, ISample } from "./setup";
-import { samples } from "./fixtures/combinations.fixture";
+import { samples, samplesCount } from "./fixtures/combinations.fixture";
 import { combinations, combinations$ } from "../src";
 
 describe("combinations generator", () => {
@@ -29,9 +29,9 @@ describe("combinations counter", () => {
         expect(combinations.count([1, 1, 2, 2, 2, 3], 1)).to.be.equal(3);
     });
 
-    withProvider(samples, (sample) => {
+    withProvider(samplesCount, (sample) => {
         it(`should return correct count - ${sample.title}`, () => {
-            expect(combinations.count(sample.input, sample.n)).to.be.equal(sample.expectation.length);
+            expect(combinations.count(sample.input, sample.n, sample.ordered)).to.be.equal(sample.expectation.length);
         });
     });
 });
