@@ -77,7 +77,9 @@ function count<T>(arr: T[], n: number, ordered: boolean = false): number {
     const h = histogram(arr);
 
     if (h.size === arr.length) {
-        return factorial(arr.length) / (factorial(n) * factorial(arr.length - n));
+        // Comninaions of unique elements
+        return factorial(arr.length) / (factorial(n) * factorial(arr.length - n))
+            * (ordered ? factorial(n) : 1);
     }
 
     const frequencies: number[] = [];

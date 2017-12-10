@@ -180,7 +180,9 @@ function count(arr, n, ordered) {
     }
     var h = utils_1.histogram(arr);
     if (h.size === arr.length) {
-        return utils_1.factorial(arr.length) / (utils_1.factorial(n) * utils_1.factorial(arr.length - n));
+        // Comninaions of unique elements
+        return utils_1.factorial(arr.length) / (utils_1.factorial(n) * utils_1.factorial(arr.length - n))
+            * (ordered ? utils_1.factorial(n) : 1);
     }
     var frequencies = [];
     var sum = 0;
