@@ -31,7 +31,8 @@ describe("combinations counter", () => {
 
     withProvider(samplesCount, (sample) => {
         it(`should return correct count - ${sample.title}`, () => {
-            expect(combinations.count(sample.input, sample.n, sample.ordered)).to.be.equal(sample.expectation.length);
+            expect(combinations.count(sample.input, sample.n, sample.ordered))
+                .to.be.equal(sample.expectedCount == null ? sample.expectation.length : sample.expectedCount);
         });
     });
 });

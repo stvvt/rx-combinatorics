@@ -94,7 +94,7 @@ export const samplesCount = samples.concat([{
         [3, 1, 1],
     ]
 }, {
-    title: "straight case non-unique (1) (ordered)",
+    title: "straight case non-unique (2) (ordered)",
     input: [1, 1, 2, 3],
     n: 1,
     ordered: true,
@@ -103,4 +103,11 @@ export const samplesCount = samples.concat([{
         [2],
         [3],
     ]
+}, {
+    title: "Real world bug",
+    input: [1, 2, 3, 4, 5, 6, 7],
+    ordered: true,
+    n: 4,
+    expectation: [],
+    expectedCount: 7 * 6 * 5 * 4
 }]);
