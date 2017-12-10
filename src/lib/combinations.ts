@@ -41,6 +41,9 @@ function count<T>(arr: T[], n: number, ordered: boolean = false): number {
         let result = 0;
 
         switch (true) {
+            case step >= frequencies.length:
+                result = 0;
+                break;
             case S < n:
                 result = 0;
                 break;

@@ -1,7 +1,8 @@
 import * as Rx from "rxjs";
 import { expect, withProvider, ISample } from "./setup";
 import { samples, samplesCount } from "./fixtures/combinations.fixture";
-import { combinations, combinations$ } from "../src";
+import { combinations, permutations, combinations$ } from "../src";
+import { Observable } from "rxjs/Observable";
 
 describe("combinations generator", () => {
 
@@ -30,9 +31,14 @@ describe("combinations counter", () => {
     });
 
     withProvider(samplesCount, (sample) => {
-        it(`should return correct count - ${sample.title}`, () => {
+        it(`should return the number of generated items - ${sample.title}`, () => {
+            let expectedCount;
+            combinations.observable(sample.input, sample.n)
+                .mergeMap((c) => sample.ordered ? permutations.observable(c) : Observable.of(c))
+                .count()
+                .subscribe((c) => expectedCount = c);
             expect(combinations.count(sample.input, sample.n, sample.ordered))
-                .to.be.equal(sample.expectedCount == null ? sample.expectation.length : sample.expectedCount);
+                .to.be.equal(expectedCount);
         });
     });
 });

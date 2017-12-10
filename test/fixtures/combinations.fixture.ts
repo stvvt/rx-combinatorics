@@ -3,6 +3,7 @@ import { ISample } from "../setup";
 export interface ICombinationsSample<T> extends ISample {
     input: T[];
     n: number;
+    ordered?: boolean;
     expectation: T[][];
 }
 
@@ -108,6 +109,11 @@ export const samplesCount = samples.concat([{
     input: [1, 2, 3, 4, 5, 6, 7],
     ordered: true,
     n: 4,
-    expectation: [],
-    expectedCount: 7 * 6 * 5 * 4
+    expectation: []
+}, {
+    title: "Real world bug - врага, 4",
+    input: [1, 2, 3, 4, 3],
+    ordered: true,
+    n: 4,
+    expectation: []
 }]);
