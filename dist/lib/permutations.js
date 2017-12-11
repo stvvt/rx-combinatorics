@@ -140,3 +140,4 @@ function permutations$(arr) {
     return Rx.Observable.from(exports.permutations(arr));
 }
 exports.permutations$ = permutations$;
+//# sourceMappingURL=permutations.js.map

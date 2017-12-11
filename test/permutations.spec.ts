@@ -39,6 +39,13 @@ describe("permutations counter", () => {
             expect(permutations.count(sample.input)).to.be.equal(sample.expectation.length);
         });
     });
+
+    it("real world bug related ", () => {
+        expect(permutations.count([1, 2, 3, 4])).to.be.equal(24);
+        expect(permutations.count([1, 2, 3, 3])).to.be.equal(12);
+        expect(permutations.count([1, 3, 3, 4])).to.be.equal(12);
+        expect(permutations.count([2, 3, 3, 4])).to.be.equal(12);
+    });
 });
 
 describe("slide", () => {

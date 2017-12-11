@@ -35,13 +35,20 @@ function permutationsCount(n: number, frequencies: number[]): number {
     return factorial(n) / reduceIterable(frequencies, (r, f) => r * factorial(f), 1);
 }
 
+export function binomialCoefficient(n: number, k: number) {
+    if (n < k) {
+        return 0;
+    }
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
 function count<T>(arr: T[], n: number, ordered: boolean = false): number {
     // tslint:disable-next-line:no-shadowed-variable
     function innerCount(step: number, S: number, n: number): number {
         let result = 0;
 
         switch (true) {
-            case step >= frequencies.length:
+            case n === 0:
                 result = 0;
                 break;
             case S < n:
@@ -56,14 +63,10 @@ function count<T>(arr: T[], n: number, ordered: boolean = false): number {
             default: {
                 S = S - frequencies[step];
                 for (let i = 0; i <= frequencies[step]; i++) {
-                    result += innerCount(step + 1, S, n - i);
+                    result += innerCount(step + 1, S, n - i) * (ordered ? binomialCoefficient(n, i) : 1);
                 }
 
                 result += frequencies[step] < n ? 0 : 1;
-
-                if (ordered) {
-                    result *= permutationsCount(n, frequencies.slice(step));
-                }
             }
         }
 
@@ -80,9 +83,8 @@ function count<T>(arr: T[], n: number, ordered: boolean = false): number {
     const h = histogram(arr);
 
     if (h.size === arr.length) {
-        // Comninaions of unique elements
-        return factorial(arr.length) / (factorial(n) * factorial(arr.length - n))
-            * (ordered ? factorial(n) : 1);
+        // Combinaions of unique elements
+        return binomialCoefficient(arr.length, n) * (ordered ? factorial(n) : 1);
     }
 
     const frequencies: number[] = [];
