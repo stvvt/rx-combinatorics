@@ -1,4 +1,5 @@
-import * as Rx from "rxjs";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/from";
 import { factorial, histogram, reduceIterable } from "./utils";
 
 function insert<T>(item: T, pos: number, arr: T[]): T[] {
@@ -33,7 +34,7 @@ function* generator<T>(arr: T[]): Iterable<T[]> {
 export interface IPermutations {
     <T>(arr: T[]): IterableIterator<T[]>;
     count<T>(arr: T[]): number;
-    observable<T>(arr: T[]): Rx.Observable<T[]>;
+    observable<T>(arr: T[]): Observable<T[]>;
 }
 
 // tslint:disable-next-line:no-angle-bracket-type-assertion
@@ -45,11 +46,11 @@ permutations.count = <T>(arr: T[]): number => {
     return factorial(arr.length) / D;
 };
 
-permutations.observable = <T>(arr: T[]): Rx.Observable<T[]> => Rx.Observable.from<T[]>(permutations<T>(arr) as any);
+permutations.observable = <T>(arr: T[]): Observable<T[]> => Observable.from<T[]>(permutations<T>(arr) as any);
 
 /**
  * @deprecated
  */
-export function permutations$<T>(arr: T[]): Rx.Observable<T[]> {
-    return Rx.Observable.from<T[]>(permutations<T>(arr) as any);
+export function permutations$<T>(arr: T[]): Observable<T[]> {
+    return Observable.from<T[]>(permutations<T>(arr) as any);
 }
