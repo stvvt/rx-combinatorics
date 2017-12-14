@@ -57,8 +57,6 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Observable_1 = require("rxjs/Observable");
-require("rxjs/add/observable/from");
 var utils_1 = require("./utils");
 function generator(arr, n) {
     var _a, _b, item, e_1_1, _c, first, rest, dups, _d, _e, c, e_2_1, e_1, _f, e_2, _g;
@@ -203,14 +201,4 @@ function count(arr, n, ordered) {
 // tslint:disable-next-line:no-angle-bracket-type-assertion
 exports.combinations = generator;
 exports.combinations.count = count;
-exports.combinations.observable = function (arr, n) {
-    return Observable_1.Observable.from(exports.combinations(arr, n));
-};
-/**
- * @deprecated
- */
-function combinations$(arr, n) {
-    return Observable_1.Observable.from(exports.combinations(arr, n));
-}
-exports.combinations$ = combinations$;
 //# sourceMappingURL=combinations.js.map

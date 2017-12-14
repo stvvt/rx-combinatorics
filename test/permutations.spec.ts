@@ -1,4 +1,3 @@
-import * as Rx from "rxjs";
 import { permutations, permutations$ } from "../src";
 import { slide } from "../src/lib/permutations";
 import { samples, slideSamples } from "./fixtures/permutations.fixture";
@@ -58,26 +57,6 @@ describe("slide", () => {
 
             expect(result).to.have.same.deep.members(sample.expectation);
 
-        });
-    });
-});
-
-describe("permutations observable", () => {
-    it("should be observable", () => {
-        const observable = permutations.observable([1, 2, 3]);
-        expect(observable).to.be.instanceof(Rx.Observable);
-    });
-
-    it("should emit unique permutations", () => {
-        withProvider(samples, (sample) => {
-            it(`should generate all permutations of array elements: ${sample.title}`, () => {
-                const result: Array<typeof sample.input> = [];
-
-                permutations.observable(sample.input)
-                    .subscribe((c) => result.push(c));
-
-                expect(result).to.have.same.deep.members(sample.expectation);
-            });
         });
     });
 });

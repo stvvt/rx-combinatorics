@@ -1,5 +1,3 @@
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/observable/from";
 import { unique, histogram, factorial, reduceIterable } from "./utils";
 
 function* generator<T>(arr: T[], n: number): IterableIterator<T[]> {
@@ -103,18 +101,8 @@ function count<T>(arr: T[], n: number, ordered: boolean = false): number {
 export interface ICombinations {
     <T>(arr: T[], n: number): IterableIterator<T[]>;
     count<T>(arr: T[], n: number, ordered?: boolean): number;
-    observable<T>(arr: T[], n: number): Observable<T[]>;
 }
 
 // tslint:disable-next-line:no-angle-bracket-type-assertion
 export const combinations: ICombinations = <ICombinations> generator;
 combinations.count = count;
-combinations.observable = <T>(arr: T[], n: number): Observable<T[]> =>
-    Observable.from<T[]>(combinations<T>(arr, n) as any);
-
-/**
- * @deprecated
- */
-export function combinations$<T>(arr: T[], n: number): Observable<T[]> {
-    return Observable.from<T[]>(combinations<T>(arr, n) as any);
-}

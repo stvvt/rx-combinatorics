@@ -1,4 +1,3 @@
-import * as Rx from "rxjs";
 import { expect, withProvider, ISample } from "./setup";
 import { samples, samplesCount } from "./fixtures/combinations.fixture";
 import { combinations, permutations, combinations$ } from "../src";
@@ -32,34 +31,18 @@ describe("combinations counter", () => {
 
     withProvider(samplesCount, (sample) => {
         it(`should return the number of generated items - ${sample.title}`, () => {
-            let expectedCount;
-            combinations.observable(sample.input, sample.n)
-                .mergeMap((c) => sample.ordered ? permutations.observable(c) : Rx.Observable.of(c))
-                .count()
-                .subscribe((c) => expectedCount = c);
+            let expectedCount = 0;
+            for (const c of combinations(sample.input, sample.n)) {
+                if (sample.ordered) {
+                    for (const p of permutations(c)) {
+                        expectedCount++;
+                    }
+                } else {
+                    expectedCount++;
+                }
+            }
             expect(combinations.count(sample.input, sample.n, sample.ordered))
                 .to.be.equal(expectedCount);
-        });
-    });
-});
-
-describe("combinations observable", () => {
-    it("should be observable", () => {
-        const observable = combinations.observable([1, 2, 3], 2);
-
-        expect(observable).to.be.instanceof(Rx.Observable);
-    });
-
-    it("should generate unique combinations", () => {
-        withProvider(samples, (sample) => {
-            it(`should generate all ${sample.n}-combinations of array elements: ${sample.title}`, () => {
-                const result: Array<typeof sample.input> = [];
-
-                combinations.observable(sample.input, sample.n)
-                    .subscribe((c) => result.push(c));
-
-                expect(result).to.have.same.deep.members(sample.expectation);
-            });
         });
     });
 
