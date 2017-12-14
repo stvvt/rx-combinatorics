@@ -57,7 +57,6 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Rx = require("rxjs");
 var utils_1 = require("./utils");
 function generator(arr, n) {
     var _a, _b, item, e_1_1, _c, first, rest, dups, _d, _e, c, e_2_1, e_1, _f, e_2, _g;
@@ -144,12 +143,22 @@ function generator(arr, n) {
 function permutationsCount(n, frequencies) {
     return utils_1.factorial(n) / utils_1.reduceIterable(frequencies, function (r, f) { return r * utils_1.factorial(f); }, 1);
 }
+function binomialCoefficient(n, k) {
+    if (n < k) {
+        return 0;
+    }
+    return utils_1.factorial(n) / (utils_1.factorial(k) * utils_1.factorial(n - k));
+}
+exports.binomialCoefficient = binomialCoefficient;
 function count(arr, n, ordered) {
     if (ordered === void 0) { ordered = false; }
     // tslint:disable-next-line:no-shadowed-variable
     function innerCount(step, S, n) {
         var result = 0;
         switch (true) {
+            case n === 0:
+                result = 0;
+                break;
             case S < n:
                 result = 0;
                 break;
@@ -162,12 +171,9 @@ function count(arr, n, ordered) {
             default: {
                 S = S - frequencies[step];
                 for (var i = 0; i <= frequencies[step]; i++) {
-                    result += innerCount(step + 1, S, n - i);
+                    result += innerCount(step + 1, S, n - i) * (ordered ? binomialCoefficient(n, i) : 1);
                 }
                 result += frequencies[step] < n ? 0 : 1;
-                if (ordered) {
-                    result *= permutationsCount(n, frequencies.slice(step));
-                }
             }
         }
         return result;
@@ -180,9 +186,8 @@ function count(arr, n, ordered) {
     }
     var h = utils_1.histogram(arr);
     if (h.size === arr.length) {
-        // Comninaions of unique elements
-        return utils_1.factorial(arr.length) / (utils_1.factorial(n) * utils_1.factorial(arr.length - n))
-            * (ordered ? utils_1.factorial(n) : 1);
+        // Combinaions of unique elements
+        return binomialCoefficient(arr.length, n) * (ordered ? utils_1.factorial(n) : 1);
     }
     var frequencies = [];
     var sum = 0;
@@ -196,13 +201,4 @@ function count(arr, n, ordered) {
 // tslint:disable-next-line:no-angle-bracket-type-assertion
 exports.combinations = generator;
 exports.combinations.count = count;
-exports.combinations.observable = function (arr, n) {
-    return Rx.Observable.from(exports.combinations(arr, n));
-};
-/**
- * @deprecated
- */
-function combinations$(arr, n) {
-    return Rx.Observable.from(exports.combinations(arr, n));
-}
-exports.combinations$ = combinations$;
+//# sourceMappingURL=combinations.js.map

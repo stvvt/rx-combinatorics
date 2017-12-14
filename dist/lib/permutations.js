@@ -53,7 +53,6 @@ var __values = (this && this.__values) || function (o) {
     };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Rx = require("rxjs");
 var utils_1 = require("./utils");
 function insert(item, pos, arr) {
     var result = arr.slice();
@@ -132,11 +131,4 @@ exports.permutations.count = function (arr) {
     var D = utils_1.reduceIterable(h.values(), function (acc, f) { return acc * utils_1.factorial(f); }, 1);
     return utils_1.factorial(arr.length) / D;
 };
-exports.permutations.observable = function (arr) { return Rx.Observable.from(exports.permutations(arr)); };
-/**
- * @deprecated
- */
-function permutations$(arr) {
-    return Rx.Observable.from(exports.permutations(arr));
-}
-exports.permutations$ = permutations$;
+//# sourceMappingURL=permutations.js.map

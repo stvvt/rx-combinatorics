@@ -1,4 +1,3 @@
-import * as Rx from "rxjs";
 import { permutations, permutations$ } from "../src";
 import { slide } from "../src/lib/permutations";
 import { samples, slideSamples } from "./fixtures/permutations.fixture";
@@ -39,6 +38,13 @@ describe("permutations counter", () => {
             expect(permutations.count(sample.input)).to.be.equal(sample.expectation.length);
         });
     });
+
+    it("real world bug related ", () => {
+        expect(permutations.count([1, 2, 3, 4])).to.be.equal(24);
+        expect(permutations.count([1, 2, 3, 3])).to.be.equal(12);
+        expect(permutations.count([1, 3, 3, 4])).to.be.equal(12);
+        expect(permutations.count([2, 3, 3, 4])).to.be.equal(12);
+    });
 });
 
 describe("slide", () => {
@@ -51,26 +57,6 @@ describe("slide", () => {
 
             expect(result).to.have.same.deep.members(sample.expectation);
 
-        });
-    });
-});
-
-describe("permutations observable", () => {
-    it("should be observable", () => {
-        const observable = permutations.observable([1, 2, 3]);
-        expect(observable).to.be.instanceof(Rx.Observable);
-    });
-
-    it("should emit unique permutations", () => {
-        withProvider(samples, (sample) => {
-            it(`should generate all permutations of array elements: ${sample.title}`, () => {
-                const result: Array<typeof sample.input> = [];
-
-                permutations.observable(sample.input)
-                    .subscribe((c) => result.push(c));
-
-                expect(result).to.have.same.deep.members(sample.expectation);
-            });
         });
     });
 });

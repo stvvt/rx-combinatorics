@@ -1,2 +1,2 @@
-export { combinations, combinations$ } from "./lib/combinations";
-export { permutations, permutations$ } from "./lib/permutations";
+export { combinations } from "./lib/combinations";
+export { permutations } from "./lib/permutations";
